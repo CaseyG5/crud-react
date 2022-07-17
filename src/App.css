@@ -8,7 +8,7 @@ h2, h3 {
 }
 
 #create {
-  min-width: 244px;
+  min-width: 240px;
   width: 28%;
 }
 
@@ -54,6 +54,18 @@ h2, h3 {
     font-size: 15px;
     font-weight: 600;
   }
+
+.btn-duo-sm {
+  width: 55px;
+}
+  .btn-sm {
+    width: 25px;
+    height: 25px;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    font-size: 15px;
+  }
   .btn-green {
     background-color: rgb(41, 173, 41);
     
@@ -71,8 +83,8 @@ h2, h3 {
     
   }
 
-.ro-input {
-  width: 40px;
+.sm-input {
+  width: 35px;
 }
 
 #card-n-ctrls {
@@ -92,7 +104,6 @@ h2, h3 {
 }
 
 .flex-start {
-  margin-left: 10px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -101,6 +112,12 @@ h2, h3 {
 .flex-center {
   display: flex;
   justify-content: center;
+}
+
+.flex-betw {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .flex-col {
@@ -115,4 +132,39 @@ h2, h3 {
 
 .w-200 {
   width: 200px;
+}
+
+.sphere {
+  width: 12px;
+  height: 12px;
+  border: 1px solid black;
+  border-radius: 50%;
+}
+
+.white {
+  background-color: rgb(255, 246, 209);
+}
+.blue {
+  background-color: rgb(73, 179, 254);
+}
+.black {
+  background-color: rgb(94, 77, 112);
+}
+.red {
+  background-color: rgb(229, 88, 88);
+}
+.green {
+  background-color: rgb(93, 173, 93);
+}
+.colorless {
+  background-color: rgb(171, 162, 147);
+}
+
+.cbl-box {
+  width: 265px;
+  height: 18px;
+  padding-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
