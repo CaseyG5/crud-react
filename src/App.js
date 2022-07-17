@@ -12,8 +12,7 @@ export default class App extends React.Component {
 
     this.state = {
       allDecks: [],
-      currentDeck: null,
-      currentCard: null  // move to DeckEditor
+      currentDeck: null
     }
 
     this.refreshList = this.refreshList.bind(this);
@@ -23,7 +22,6 @@ export default class App extends React.Component {
   }
 
   async editDeck(id) {
-    // console.log("edit button clicked; id is", id);
     const deck = await decksApi.getDeck(id);
     this.setState( {currentDeck: deck} );
   }
@@ -47,7 +45,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    console.log('app.js - currentDeck:', this.state.currentDeck);
     return (
       <div className='App'>
         <div id="create">
@@ -55,7 +52,7 @@ export default class App extends React.Component {
           <DeckEntries handleRefresh={this.refreshList} 
                       decks={this.state.allDecks ? this.state.allDecks.map((deck) => { 
                         return <Deck key={deck.id} idNum={deck.id} data={deck} 
-                        delete={this.deleteDeck} edit={this.editDeck} /> 
+                        delete={this.deleteDeck} edit={this.editDeck} cancel={this.cancelEdit} /> 
                       })  : [] } />
         </div>
         <div id="edit">
