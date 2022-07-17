@@ -1,11 +1,14 @@
 import React from 'react';
-import '../App.css';
+import ColorIcon from './ColorIcon';
 
 export default function Colors(props) {
 
     return(
-        <div className='inl'>
-            { props.colors.map( (color) => (<span>{color} </span>) ) }
+        <div style={{display: "flex", alignItems: "center", flexWrap: "wrap"}}>
+            { props.colors.map( (color) => 
+                ( <><i className={`sphere ${color}`} ></i>&nbsp;{color}&nbsp;</> ) 
+            )}
         </div>
+        
     );
 }
