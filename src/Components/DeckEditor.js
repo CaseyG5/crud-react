@@ -3,16 +3,17 @@ import { decksApi } from '../DecksAPI';
 import '../App.css';
 import { Deck } from '../Deck.mjs';
 import CardList from './CardList';
+import Tester from './Tester';
 
 export default class DeckEditor extends React.Component {
     constructor(props) {
         super(props);
 
-        this.tempDeck = null;
-        this.qty = 1;
+        this.tempDeck = null;   // full Deck object {id, name, cards, colors}
+        this.testDeck = [];     // array of 3-digit card id numbers
 
         this.state = {
-            deckID: '',
+            deckID: '',         
             deckName: '',
             cards: [],
             cardCount: 0,
@@ -21,7 +22,8 @@ export default class DeckEditor extends React.Component {
             cardSearchText: '',
             cardName: '',
             cardID: 0,
-            cardSrc: ''
+            cardSrc: '',
+            my60: []
         }
         this.handleDeckNameChange = this.handleDeckNameChange.bind(this);
         this.handleCheckboxWhite = this.handleCheckboxWhite.bind(this);
@@ -37,6 +39,7 @@ export default class DeckEditor extends React.Component {
         this.updateQuantity = this.updateQuantity.bind(this);
         this.removeCard = this.removeCard.bind(this);
         this.removeAll = this.removeAll.bind(this);
+        this.buildTestDeck = this.buildTestDeck.bind(this);
         this.cancelEdit = this.cancelEdit.bind(this);
         this.getUpdatedColors = this.getUpdatedColors.bind(this);
         this.handleSave = this.handleSave.bind(this);
@@ -88,6 +91,18 @@ export default class DeckEditor extends React.Component {
         this.setState({ cardCount: 0 });
     }
 
+    buildTestDeck() {
+        this.testDeck.length = 0;
+        console.log("building test deck");
+        this.tempDeck.cards.forEach((card) => {
+            for(let i=0; i<card.qty; i++) {
+                this.testDeck.push(card.id);
+            }
+        });
+        this.setState({my60: this.testDeck});
+          
+    }
+
     cancelEdit() {
         this.setState({ 
             deckID: '', deckName: '', cards: [], cardCount: 0, 
@@ -121,7 +136,7 @@ export default class DeckEditor extends React.Component {
         const { currentDeck } = this.props;
         if(!prevprops.currentDeck && currentDeck) {      // if currentDeck WAS null but now contains data
             this.tempDeck = new Deck(currentDeck.name, currentDeck.id, currentDeck.colors);
-            this.tempDeck.cards = currentDeck.cards.slice();
+            this.tempDeck.cards = currentDeck.cards.slice();  // must make a copy because props are read-only
                 
             this.setState({                                  
                 deckName: currentDeck.name,
@@ -144,7 +159,8 @@ export default class DeckEditor extends React.Component {
     }
 
     render() {
-        return (
+      return (
+        <div>
             <div className='flex-row'>
                 <div id="editor-panel" className='cont'>
                     <h2>{this.props.currentDeck ? `Editing "${this.props.currentDeck.name}"` : "Editor"}</h2>
@@ -212,11 +228,13 @@ export default class DeckEditor extends React.Component {
                     </div>
                 </div>
                 <div id="card-list" className='cont'>
-                    {this.state.cards ? <CardList cards={this.state.cards} 
+                    {this.state.cards ? <CardList cards={this.state.cards} testMyDeck={this.buildTestDeck}
                                                   updateQty={this.updateQuantity} delete={this.removeCard}/> 
                         : <p>No cards to display</p> }
                 </div>
             </div>
-        );
+            { this.state.my60.length >= 60 ? <Tester deck={this.testDeck} /> : <p>Add more cards to your deck</p> }
+        </div>
+      );
     }
 }
