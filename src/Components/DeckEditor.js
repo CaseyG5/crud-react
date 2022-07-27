@@ -228,12 +228,14 @@ export default class DeckEditor extends React.Component {
                     </div>
                 </div>
                 <div id="card-list" className='cont'>
-                    {this.state.cards ? <CardList cards={this.state.cards} testMyDeck={this.buildTestDeck}
-                                                  updateQty={this.updateQuantity} delete={this.removeCard}/> 
+                    {this.state.cards ? <CardList cards={this.state.cards} has60={this.state.cardCount >= 60 ? true : false} 
+                                                  testMyDeck={this.buildTestDeck}
+                                                  updateQty={this.updateQuantity} deleteCard={this.removeCard}/> 
                         : <p>No cards to display</p> }
                 </div>
             </div>
-            { this.state.my60.length >= 60 ? <Tester deck={this.testDeck} /> : <p>Load a deck or add more cards</p> }
+            { this.state.my60.length >= 60 ? <Tester deck={this.testDeck} /> 
+                                           : <p style={{marginLeft: "20px"}}>Load/create a deck of 60 cards and click Test</p> }
         </div>
       );
     }

@@ -26,7 +26,6 @@ export default class Deck extends React.Component {
         let numCards = data.cards.reduce((sum, card) => (sum + Number(card.qty)), 0);
         if(prevstate.totalCards != numCards) {
             this.setState({totalCards: numCards});
-            // console.log("updated state.totalCards");
         }
     }
 
@@ -48,5 +47,3 @@ export default class Deck extends React.Component {
         );
     }  
 }
-
-// className="btn btn-danger action-btn"

@@ -24,13 +24,14 @@ export default function Tester(props) {
 
     const [hand, setHand] = useState( [] );
     
-    useEffect( () => {
-        cardsInDeck = props.deck.slice();
+    useEffect( () => {                                      
+        cardsInDeck = props.deck.slice();                   
         shuffle();
-    }, []);
+        cardsInHand.length = 0;
+    }, []);                                                 // works as componentDidMount() this way
 
     const draw = (howMany) => {
-        if(cardsInHand.length + howMany <=10) {
+        if(cardsInHand.length + howMany <=10) {             // allow 10 max for now
 
             for(let d=0; d<howMany; d++) {
                 cardsInHand.push(cardsInDeck.pop());
@@ -38,7 +39,7 @@ export default function Tester(props) {
             setHand(cardsInHand.map((cardNum, index) =>     // set hand to an array of images here
                 (<img key={`${cardNum}${index}`}            // instead of using .map() in 
                       src={`/images/${cardNum}.jpeg`}       // the return statement below
-                      width='110px' height={"153px"} 
+                      width={"110px"} height={"153px"} 
                       alt='game card' />) ));
         }    
     }
@@ -48,11 +49,12 @@ export default function Tester(props) {
             cardsInDeck.push(cardsInHand.pop());
         }
         shuffle();  
-        setHand( [] );
+        setHand( [] );                                      // reset state variable to blank
     }
 
     const mulligan = () => {                                
-        let cardsToDraw = cardsInHand.length - 1;           
+        let cardsToDraw = cardsInHand.length - 1;    
+        if (cardsToDraw < 0) cardsToDraw = 0;       
         reset();
         draw(cardsToDraw);
     }
