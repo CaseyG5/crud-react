@@ -106,7 +106,8 @@ export default class DeckEditor extends React.Component {
     cancelEdit() {
         this.setState({ 
             deckID: '', deckName: '', cards: [], cardCount: 0, 
-            cbWhite: false, cbBlue: false, cbBlack: false, cbRed: false, cbGreen: false, cbColorless: false 
+            cbWhite: false, cbBlue: false, cbBlack: false, cbRed: false, cbGreen: false, cbColorless: false,
+            my60: [] 
         });
         this.props.cancel();
     }
@@ -206,7 +207,6 @@ export default class DeckEditor extends React.Component {
                             <div>
                                 <button onClick={this.addCard} className='btn btn-green'>+1</button><br></br><br></br>
                                 <button onClick={this.addFour} className='btn btn-green'>+4</button><br></br><br></br>
-                                {/* <button onClick={this.removeOne} className='btn btn-red'>-1</button><br></br><br></br> */}
                                 <button onClick={this.removeAll} className='btn btn-red'>-all</button>
                             </div>
                             <div>
@@ -233,7 +233,7 @@ export default class DeckEditor extends React.Component {
                         : <p>No cards to display</p> }
                 </div>
             </div>
-            { this.state.my60.length >= 60 ? <Tester deck={this.testDeck} /> : <p>Add more cards to your deck</p> }
+            { this.state.my60.length >= 60 ? <Tester deck={this.testDeck} /> : <p>Load a deck or add more cards</p> }
         </div>
       );
     }

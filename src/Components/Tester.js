@@ -1,65 +1,68 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../App.css';
 
-export default function Tester(props) {
-    let deck = props.deck.slice();
-    let cardsInHand = [];
+var cardsInDeck = [];
+var cardsInHand = [];
 
-    const [hand, setHand] = useState([]);
-
-    const shuffle = () => {
-        let j = 0;
-        let temp = 0;
-        for(let i = deck.length - 1; i>0; i--) {
-            let j = Math.floor(Math.random() * i);
-            
-            temp = deck[i];
-            deck[i] = deck[j];
-            deck[j] = temp;
-        }
+const shuffle = () => {             // The simple but effective Fisher-Yates shuffling algorithm
+    let j = 0;
+    let temp = 0;
+    for(let i = cardsInDeck.length - 1; i>0; i--) {     // for each card from last down to the 2nd
+        j = Math.floor(Math.random() * i);              // get a random index from 0 to i
+        
+        temp = cardsInDeck[i];                          // swap the card at position i with
+        cardsInDeck[i] = cardsInDeck[j];                // the random index
+        cardsInDeck[j] = temp;                          
     }
+    console.log("shuffled");
+}
+
+
+
+export default function Tester(props) {
+
+    const [hand, setHand] = useState( [] );
+    
+    useEffect( () => {
+        cardsInDeck = props.deck.slice();
+        shuffle();
+    }, []);
 
     const draw = (howMany) => {
-
         if(cardsInHand.length + howMany <=10) {
-            console.log("drawing cards");
+
             for(let d=0; d<howMany; d++) {
-                cardsInHand.push(deck.pop());
+                cardsInHand.push(cardsInDeck.pop());
             }
-            console.log("cardsInHand before setHand()", cardsInHand);
-            setHand(cardsInHand);
-            console.log("cardsInHand after setHand()", cardsInHand);
+            setHand(cardsInHand.map((cardNum, index) =>     // set hand to an array of images here
+                (<img key={`${cardNum}${index}`}            // instead of using .map() in 
+                      src={`/images/${cardNum}.jpeg`}       // the return statement below
+                      width='110px' height={"153px"} 
+                      alt='game card' />) ));
         }    
     }
 
     const reset = () => {
-        console.log("putting cards back");
-        console.log("cardsInHand:", cardsInHand);
-        console.log("hand.length:", hand.length)
-        for(let i=hand.length; i>0; i--) {
-            console.log("removing card from hand and putting back on library");
-            deck.push(hand[i]);
+        for(let i=cardsInHand.length; i>0; i--) {           // put back cards in hand
+            cardsInDeck.push(cardsInHand.pop());
         }
-            
-        // setHand([]);
-        shuffle();
+        shuffle();  
+        setHand( [] );
     }
 
-    const mulligan = () => {
-        console.log("mulligan-ing");
-        let cardsToDraw = hand.length - 1;
-        console.log("cards to draw:", cardsToDraw);
+    const mulligan = () => {                                
+        let cardsToDraw = cardsInHand.length - 1;           
         reset();
-        console.log("just called reset()");
         draw(cardsToDraw);
     }
 
+    
 
     return(
         <div id='test-area'>
-            <div id='hand'>   
-                {hand.map((cardNum) => (<img src={`/images/${cardNum}.jpeg`} width='110px' height={"153px"} alt='game card' />) )}
+            <div id='hand'>                                 
+                {hand}                                      {/* mapping here did NOT render updates */}
             </div>
             <div className='flex-col' style={{width: "80px", height: "130px"}}>
                 <button onClick={shuffle}>Shuffle</button>
