@@ -27,7 +27,7 @@ h2, h3 {
       width: 43%;
     }
 
-.cont {
+.cont {                     /* styled container */
   margin-top: 5px;
   border: 1px solid gray;
   border-radius: 5px;
@@ -35,28 +35,28 @@ h2, h3 {
   background-color: whitesmoke;
 }
 
-.btn-block {
+.btn-block {                /* holds btn-duo off to the right */
   display: flex;
   justify-content: flex-end;
 }
 
-.btn-duo {
-  width: 150px;
-  display: flex;
-  justify-content: space-between;
-  
-}
-  .btn {
-    width: 70px;
-    height: 30px;
-    border: none;
-    border-radius: 3px;
-    color: white;
-    font-size: 15px;
-    font-weight: 600;
+  .btn-duo {                /* holds a pair of buttons */
+    width: 150px;
+    display: flex;
+    justify-content: space-between;
+    
   }
+    .btn {
+      width: 70px;
+      height: 30px;
+      border: none;
+      border-radius: 3px;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+    }
 
-.btn-duo-sm {
+.btn-duo-sm {               /* holds a pair of small buttons */
   width: 55px;
 }
   .btn-sm {
@@ -67,35 +67,22 @@ h2, h3 {
     color: white;
     font-size: 15px;
   }
-  .btn-green {
-    background-color: rgb(41, 173, 41);
-    
-  }
-  .btn-blue {
-    background-color: rgb(0, 140, 255);
-    
-  }
-  .btn-red {
-    background-color: rgb(200, 22, 22);
-    
-  }
-  .btn-gray {
-    background-color: rgb(125, 125, 125);
-    
-  }
+  .btn-green {  background-color: rgb(41, 173, 41);  }
+  .btn-blue {  background-color: rgb(0, 140, 255);  }
+  .btn-red {  background-color: rgb(200, 22, 22);  }
+  .btn-gray {  background-color: rgb(125, 125, 125);  }
 
 .sm-input {
   width: 35px;
 }
 
-#card-n-ctrls {
+#card-n-ctrls {             /* holds card image and vertical button panel */
   display: flex;
   justify-content: space-around;
 }
   #card-frame {
     width: 223px;
     height: 310px;
-    
     border-radius: 12px;
     background-color: rgb(236, 246, 255);
   }
@@ -127,33 +114,21 @@ h2, h3 {
   justify-content: space-between;
 }
 
-.sphere {
+.sphere {             /* color icon */
   width: 12px;
   height: 12px;
   border: 1px solid black;
   border-radius: 50%;
 }
 
-.white {
-  background-color: rgb(255, 246, 209);
-}
-.blue {
-  background-color: rgb(73, 179, 254);
-}
-.black {
-  background-color: rgb(94, 77, 112);
-}
-.red {
-  background-color: rgb(229, 88, 88);
-}
-.green {
-  background-color: rgb(93, 173, 93);
-}
-.colorless {
-  background-color: rgb(171, 162, 147);
-}
+.white {  background-color: rgb(255, 246, 209);  }
+.blue {  background-color: rgb(73, 179, 254);  }
+.black {  background-color: rgb(94, 77, 112);  }
+.red {  background-color: rgb(229, 88, 88);  }
+.green {  background-color: rgb(93, 173, 93);  }
+.colorless {  background-color: rgb(171, 162, 147);  }
 
-.cbl-box {
+.cbl-box {            /* container for 3 checkboxes with labels */
   width: 265px;
   height: 18px;
   padding-bottom: 2px;
@@ -162,7 +137,7 @@ h2, h3 {
   align-items: center;
 }
 
-#test-area {
+#test-area {          /* container to view sample hands of cards drawn */
   width: 100%;
   height: 308px;
   display: flex;

@@ -21,21 +21,21 @@ export default class App extends React.Component {
     this.deleteDeck = this.deleteDeck.bind(this);
   }
 
-  async editDeck(id) {
+  async editDeck(id) {                                // sends GET request to api for a deck by ID
     const deck = await decksApi.getDeck(id);
     this.setState( {currentDeck: deck} );
   }
 
-  cancelEdit() {
+  cancelEdit() {                                      // resets current deck to nothing (stops editing)
     this.setState( {currentDeck: null} );
   }
 
-  async deleteDeck(id) {
+  async deleteDeck(id) {                              // sends DELETE request to api for a deck by ID
     const msg = await decksApi.deleteDeck(id);
     console.log(msg);
   }
 
-  async refreshList() {
+  async refreshList() {                               // sends GET request to api for ALL decks
     const decks = await decksApi.getAllDecks();
     this.setState( {allDecks: decks} );
   }
@@ -44,8 +44,8 @@ export default class App extends React.Component {
     this.refreshList();
   }
 
-  render() {
-    return (
+  render() {                                          // <DeckEntries/> maps each deck to a <Deck/> component below
+    return (                                          // while <DeckEditor/> takes the single deck received from GET
       <div className='App'>
         <div id="create">
           <NewDeckForm />

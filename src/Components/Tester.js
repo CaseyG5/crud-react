@@ -45,7 +45,7 @@ export default function Tester(props) {
     }
 
     const reset = () => {
-        for(let i=cardsInHand.length; i>0; i--) {           // put back cards in hand
+        for(let i=cardsInHand.length; i>0; i--) {           // put back cards in hand on top of deck
             cardsInDeck.push(cardsInHand.pop());
         }
         shuffle();  
@@ -64,7 +64,7 @@ export default function Tester(props) {
     return(
         <div id='test-area'>
             <div id='hand'>                                 
-                {hand}                                      {/* mapping here did NOT render updates */}
+                {hand}                                      {/* mapping here did NOT render updates properly */}
             </div>
             <div className='flex-col' style={{width: "80px", height: "130px"}}>
                 <button onClick={shuffle}>Shuffle</button>
