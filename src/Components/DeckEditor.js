@@ -161,8 +161,8 @@ export default class DeckEditor extends React.Component {
       return (
         <div>
             <div className='flex-row'>
-                <div>
-                    <div id="editor-panel" className='cont'>
+                <div id="editor-panel">
+                    <div className='cont'>
                         <h2>{this.props.currentDeck ? `Editing "${this.props.currentDeck.name}"` : "Editor"}</h2>
                         <div className='flex-start' style={{marginLeft: "20px"}}>
                             <label>ID: &nbsp;
@@ -226,7 +226,7 @@ export default class DeckEditor extends React.Component {
                             </div>
                         </div>
                     </div>
-                    { this.state.my60.length < 60 ? <p style={{marginLeft: "20px"}}>Load/create a deck of 60 cards and click Test</p>
+                    { this.state.my60.length < 60 ? <p style={{marginLeft: "20px"}}>Load/create a deck of 60 &amp; click Test</p>
                                                   : null }
                 </div>
                 <div id="card-list" className='cont'>
