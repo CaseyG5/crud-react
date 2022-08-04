@@ -13,50 +13,35 @@ export default class DeckEditor extends React.Component {
         this.testDeck = [];     // array of 3-digit card id numbers   (used with the <Tester/> component)
 
         this.state = {
-            deckID: '',                                             // ID # of deck currently being edited
-            deckName: '',                                           // Name of deck "   "
-            cards: [],                                              // cards (names, id #s, and quantities) in deck being edited
+            deckID: '',                          // ID # of deck currently being edited
+            deckName: '',                        // Name of deck "   "
+            cards: [],                           // cards (names, id #s, and quantities) in deck being edited
             cardCount: 0,                                           // total # of cards "   "
             cbWhite: false, cbBlue: false, cbBlack: false,          // 6 checkboxes for colors
             cbRed: false, cbGreen: false, cbColorless: false,
             cardSearchText: '',                                     // for the card search input field
-            cardName: '',                                           // name of card returned from search
-            cardID: 0,                                              // and its ID #
-            cardSrc: '',                                            // the resulting path to the image
-            my60: []                                                // full deck of card id #s  (copied from this.testDeck)
+            cardName: '',                             // name of card returned from search
+            cardID: 0,                                // and its ID #
+            cardSrc: '',                              // the resulting path to the image
+            my60: []                                  // full deck of card id #s  (copied from this.testDeck)
         }
-        this.handleDeckNameChange = this.handleDeckNameChange.bind(this);       
-        this.handleCheckboxWhite = this.handleCheckboxWhite.bind(this);         
-        this.handleCheckboxBlue = this.handleCheckboxBlue.bind(this);
-        this.handleCheckboxBlack = this.handleCheckboxBlack.bind(this);
-        this.handleCheckboxRed = this.handleCheckboxRed.bind(this);
-        this.handleCheckboxGreen = this.handleCheckboxGreen.bind(this);
-        this.handleCheckboxColorless = this.handleCheckboxColorless.bind(this);
-        this.handleCardNameChange = this.handleCardNameChange.bind(this);       
-        this.handleSearch = this.handleSearch.bind(this);                       
-        this.addCard = this.addCard.bind(this);                                 
-        this.addFour = this.addFour.bind(this);                                 
+                                       
         this.updateQuantity = this.updateQuantity.bind(this);                   
-        this.removeCard = this.removeCard.bind(this);                           
-        this.removeAll = this.removeAll.bind(this);                             
-        this.buildTestDeck = this.buildTestDeck.bind(this);                     
-        this.cancelEdit = this.cancelEdit.bind(this);                           
-        this.getUpdatedColors = this.getUpdatedColors.bind(this);               
-        this.handleSave = this.handleSave.bind(this);                           
+        this.removeCard = this.removeCard.bind(this);                                                                       
+        this.getUpdatedColors = this.getUpdatedColors.bind(this);    
+        this.buildTestDeck = this.buildTestDeck.bind(this);                                     
     }
+                // for changing name of deck currently being edited
+    handleDeckNameChange(evt) {  this.setState({deckName: evt.target.value});  }  
+                
+    handleCheckbox(evt) {                   // for checking & unchecking color checkboxes
+        let color = evt.target.value;
+        this.setState({ [`cb${color}`]: !this.state[`cb${color}`] });  
+    }  
+                // for the text in the card search input field
+    handleCardNameChange(evt) {  this.setState({cardSearchText: evt.target.value});  }      
 
-    handleDeckNameChange(evt) {  this.setState({deckName: evt.target.value});  }    // for changing name of deck currently being edited
-
-    handleCheckboxWhite() {  this.setState({cbWhite: !this.state.cbWhite});  }      // for checking & unchecking color checkboxes
-    handleCheckboxBlue() {  this.setState({cbBlue: !this.state.cbBlue});  }
-    handleCheckboxBlack() {  this.setState({cbBlack: !this.state.cbBlack});  }
-    handleCheckboxRed() {  this.setState({cbRed: !this.state.cbRed});  }
-    handleCheckboxGreen() {  this.setState({cbGreen: !this.state.cbGreen});  }
-    handleCheckboxColorless() {  this.setState({cbColorless: !this.state.cbColorless});  }
-
-    handleCardNameChange(evt) {  this.setState({cardSearchText: evt.target.value});  }      // for the text in the card search input field
-
-    async handleSearch() {                                          // sends the api request for a card (searches by name or first few letters)
+    async handleSearch() {                     // sends the api request for a card (searches by name or first few letters)
         if(!this.state.cardSearchText) return;
         const data = await decksApi.getCard(this.state.cardSearchText);
         if(data.cardName) this.setState({
@@ -65,43 +50,41 @@ export default class DeckEditor extends React.Component {
         this.setState({cardSearchText: ''});
     }
 
-    addCard() {                                                     // adds 1 copy of card currently being viewed to the deck currently being edited
+    addCard() {                   // adds 1 copy of card currently being viewed to the deck currently being edited
         if(!this.state.deckName || !this.state.cardName) return;
         const wasAdded = this.tempDeck.addCard(this.state.cardName, this.state.cardID);
         if(wasAdded) this.setState({ cardCount: this.state.cardCount + 1 });
     }
-    addFour() {                                                     // adds 4 copies of card "   " ...if space is available (4 max)
+    addFour() {                   // adds 4 copies of card "   " ...if space is available (4 max)
         if(!this.state.deckName || !this.state.cardName) return;
         const wasAdded = this.tempDeck.addCard(this.state.cardName, this.state.cardID, 4);
         if(wasAdded) this.setState({ cardCount: this.state.cardCount + 4 });
     }
-    updateQuantity(id, qty) {                                       // updates quantity of card in list if quantity (number) input field was changed
+    updateQuantity(id, qty) {     // updates quantity of card in list if quantity (number) input field was changed
         const difference = Number(this.tempDeck.updateCardQty(id, qty));
         this.setState({ cardCount: this.state.cardCount + Number(difference)});
     }
-    removeCard(id) {                                                // removes all copies of a card from the deck currently being edited
+    removeCard(id) {              // removes all copies of a card from the deck currently being edited
         const numRemoved = this.tempDeck.removeCard(id);
         this.setState({ cardCount: this.state.cardCount - Number(numRemoved)});
     }
-    removeAll() {                                                   // removes all cards from the deck currently being edited
+    removeAll() {                                       // removes all cards from the deck currently being edited
         if(!this.state.deckName) return;
         this.tempDeck.removeAllCards();
         this.setState({ cardCount: 0 });
     }
 
-    buildTestDeck() {                                               // populates this.testDeck with all cards in the deck (as card ID #s)
+    buildTestDeck() {                       // populates this.testDeck with all cards in the deck (as card ID #s)
         this.testDeck.length = 0;
-        console.log("building test deck");
         this.tempDeck.cards.forEach((card) => {
             for(let i=0; i<card.qty; i++) {
                 this.testDeck.push(card.id);
             }
         });
         this.setState({my60: this.testDeck});
-          
     }
 
-    cancelEdit() {                                                  // resets relevant state variables, incl those for form fields
+    cancelEdit() {                                 // resets relevant state variables, incl those for form fields
         this.setState({ 
             deckID: '', deckName: '', cards: [], cardCount: 0, 
             cbWhite: false, cbBlue: false, cbBlack: false, cbRed: false, cbGreen: false, cbColorless: false,
@@ -110,7 +93,7 @@ export default class DeckEditor extends React.Component {
         this.props.cancel();                    // resets current deck (prop variable) to null
     }
 
-    getUpdatedColors() {                                            // grabs the color(s) from currently selected color checkboxes
+    getUpdatedColors() {                          // grabs the color(s) from currently selected color checkboxes
         const tempColors = [];
         if(this.state.cbWhite) tempColors.push("white");
         if(this.state.cbBlue) tempColors.push("blue");
@@ -121,7 +104,7 @@ export default class DeckEditor extends React.Component {
         return tempColors;
     }
 
-    async handleSave() {                                            // saves changes made during editing via PUT request to api
+    async handleSave() {                             // saves changes made during editing via PUT request to api
         if(!this.state.deckName) return;
         const deck = new Deck(this.state.deckName, this.state.deckID, this.getUpdatedColors());
         deck.cards = this.tempDeck.cards;
@@ -150,7 +133,6 @@ export default class DeckEditor extends React.Component {
                 cbGreen: currentDeck.colors.includes("green"),
                 cbColorless: currentDeck.colors.includes("colorless"),
             });
-            
         }
         else if(prevprops.currentDeck && !currentDeck) {                     // else vice versa
             this.cancelEdit();
@@ -169,31 +151,31 @@ export default class DeckEditor extends React.Component {
                                 <input className='sm-input' type="text" value={this.props.currentDeck ? this.props.currentDeck.id : ''} readOnly/> &nbsp;&nbsp;
                             </label> &nbsp;
                             <label>Name: &nbsp;
-                                <input style={{width: "180px"}} type="text" value={this.state.deckName} onChange={this.handleDeckNameChange}/> 
+                                <input style={{width: "180px"}} type="text" value={this.state.deckName} onChange={(evt) => this.handleDeckNameChange(evt)}/> 
                             </label>
                         </div>
                         <div style={{marginLeft: "20px"}}>
                             <br></br>
                             <div className='cbl-box'>
                                 <label >
-                                    <input type="checkbox" value="white" checked={this.state.cbWhite} onChange={this.handleCheckboxWhite}/>
+                                    <input type="checkbox" value="White" checked={this.state.cbWhite} onChange={(evt) => this.handleCheckbox(evt)}/>
                                 &nbsp; White</label>
                                 <label >
-                                    <input type="checkbox" value="blue" checked={this.state.cbBlue} onChange={this.handleCheckboxBlue}/> 
+                                    <input type="checkbox" value="Blue" checked={this.state.cbBlue} onChange={(evt) => this.handleCheckbox(evt)}/> 
                                 &nbsp; Blue</label>
                                 <label >
-                                    <input type="checkbox" value="black" checked={this.state.cbBlack} onChange={this.handleCheckboxBlack}/> 
+                                    <input type="checkbox" value="Black" checked={this.state.cbBlack} onChange={(evt) => this.handleCheckbox(evt)}/> 
                                 &nbsp; Black</label>
                             </div>
                             <div className='cbl-box'>
                                 <label >
-                                    <input type="checkbox" value="red" checked={this.state.cbRed} onChange={this.handleCheckboxRed}/> 
+                                    <input type="checkbox" value="Red" checked={this.state.cbRed} onChange={(evt) => this.handleCheckbox(evt)}/> 
                                 &nbsp; Red</label>
                                 <label >
-                                    <input type="checkbox" value="green" checked={this.state.cbGreen} onChange={this.handleCheckboxGreen}/> 
+                                    <input type="checkbox" value="Green" checked={this.state.cbGreen} onChange={(evt) => this.handleCheckbox(evt)}/> 
                                 &nbsp; Green</label>
                                 <label >
-                                    <input type="checkbox" value="colorless" checked={this.state.cbColorless} onChange={this.handleCheckboxColorless}/> 
+                                    <input type="checkbox" value="Colorless" checked={this.state.cbColorless} onChange={(evt) => this.handleCheckbox(evt)}/> 
                                 &nbsp; Colorless</label>
                             </div>    
                         </div>
@@ -204,9 +186,9 @@ export default class DeckEditor extends React.Component {
                             </div>
                             <div className='flex-col'>
                                 <div>
-                                    <button onClick={this.addCard} className='btn btn-green'>+1</button><br></br><br></br>
-                                    <button onClick={this.addFour} className='btn btn-green'>+4</button><br></br><br></br>
-                                    <button onClick={this.removeAll} className='btn btn-red'>-all</button>
+                                    <button onClick={() => this.addCard()} className='btn btn-green'>+1</button><br></br><br></br>
+                                    <button onClick={() => this.addFour()} className='btn btn-green'>+4</button><br></br><br></br>
+                                    <button onClick={() => this.removeAll()} className='btn btn-red'>-all</button>
                                 </div>
                                 <div>
                                     <label>Total:</label><br></br>
@@ -215,14 +197,14 @@ export default class DeckEditor extends React.Component {
                             </div>    
                         </div><br></br>
                         <div className='flex-start' style={{marginLeft: "20px"}}>
-                            <input style={{width: "180px"}} type="text" value={this.state.cardSearchText} onChange={this.handleCardNameChange} /> &nbsp;
-                            <button onClick={this.handleSearch} className='btn btn-blue'>&#128269;</button>
+                            <input style={{width: "180px"}} type="text" value={this.state.cardSearchText} onChange={(evt) => this.handleCardNameChange(evt)} /> &nbsp;
+                            <button onClick={() => this.handleSearch()} className='btn btn-blue'>&#128269;</button>
                         </div>
                         <br></br>
                         <div className='btn-block'>
                             <div className='btn-duo'>
-                                <button onClick={this.cancelEdit} className='btn btn-gray'>Cancel</button>
-                                <button onClick={this.handleSave} className='btn btn-blue'>Save</button>
+                                <button onClick={() => this.cancelEdit()} className='btn btn-gray'>Cancel</button>
+                                <button onClick={() => this.handleSave()} className='btn btn-blue'>Save</button>
                             </div>
                         </div>
                     </div>
@@ -230,9 +212,12 @@ export default class DeckEditor extends React.Component {
                                                   : null }
                 </div>
                 <div id="card-list" className='cont'>
-                    {this.state.cards ? <CardList cards={this.state.cards} has60={this.state.cardCount >= 60 ? true : false} 
-                                                  testMyDeck={this.buildTestDeck}
-                                                  updateQty={this.updateQuantity} deleteCard={this.removeCard}/> 
+                    {this.state.cards ? 
+                        <CardList cards={this.state.cards} 
+                                  has60={this.state.cardCount >= 60 ? true : false} 
+                                  testMyDeck={this.buildTestDeck}
+                                  updateQty={this.updateQuantity} 
+                                  deleteCard={this.removeCard}/> 
                         : <p>No cards to display</p> }
                 </div>
             </div>
